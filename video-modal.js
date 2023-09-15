@@ -53,7 +53,8 @@ function loadYouTubeAPI() {
   console.log('Loading YouTube API.');
   // This code loads the IFrame Player API code asynchronously.
   var tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api?origin=https://testflow-q32023-656b76d57aa7a113f66ed98.webflow.io/";
+  //tag.src = "https://www.youtube.com/iframe_api?origin=https://testflow-q32023-656b76d57aa7a113f66ed98.webflow.io/";
+  tag.src = "https://www.youtube.com/iframe_api?origin=*";
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
@@ -103,12 +104,14 @@ function stopVideoAndDestroyPlayer() {
   }
 }
 
-// Function to add click event listeners to elements with class "card-base"
+// Function to add click event listeners to elements with class "card-base" and dynamically loaded ones
 function addClickListenersToCards() {
   console.log('Adding click listeners to elements with class "card-base".');
-  var cards = document.querySelectorAll('.card-base');
-  cards.forEach(function(card) {
-    card.addEventListener('click', handleCardClick);
+  document.addEventListener('click', function(event) {
+    var card = event.target.closest('.card-base');
+    if (card) {
+      handleCardClick(event);
+    }
   });
 }
 
@@ -127,7 +130,7 @@ function addCloseListeners() {
   });
 }
 
-// Wait for the DOM to fully load before adding event listeners
+// Wait for the DOM to fully load before initializing the script
 document.addEventListener('DOMContentLoaded', function() {
   loadYouTubeAPI(); // Load the YouTube API
   addClickListenersToCards(); // Listen for card clicks
